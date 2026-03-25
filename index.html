@@ -923,15 +923,22 @@
         // ── FLOWS ────────────────────────────────────────────────
         function startRdvFlow() {
           claraReset();
-          claraState.step = 'boutique';
-          addBotWithChips("Parfait ! Dans quelle boutique souhaitez-vous votre rendez-vous ?", ['🏛 Villiers-le-Bel','🏛 Drancy','🏛 Domont']);
+          claraState.boutique = 'villiers';
+          claraState.step = 'motif';
+          addBotWithChips("Parfait ! La prise de RDV en ligne est disponible pour notre boutique de Villiers-le-Bel.\n\nQuel est le motif de votre visite ?", MOTIFS);
         }
 
         function selectBoutique(chip) {
           var key = chip.toLowerCase().includes('villiers') ? 'villiers' : chip.toLowerCase().includes('drancy') ? 'drancy' : 'domont';
+          if (key === 'drancy' || key === 'domont') {
+            var b = BOUTIQUES[key];
+            addBotWithChips("La prise de RDV en ligne arrive bientôt pour " + b.name + " !\n\nEn attendant, appelez directement au " + b.phone + " ou posez-moi vos questions sur cette boutique.", ['❓ FAQ', '📞 Appeler ' + b.name, '🏛 Réserver à Villiers-le-Bel']);
+            claraState.step = 'idle';
+            return;
+          }
           claraState.boutique = key;
           claraState.step = 'motif';
-          addBotWithChips("Boutique " + BOUTIQUES[key].name + " ✓\n\nQuel est le motif de votre visite ?", MOTIFS);
+          addBotWithChips("Boutique Villiers-le-Bel ✓\n\nQuel est le motif de votre visite ?", MOTIFS);
         }
 
         function selectMotif(motif) {
@@ -957,24 +964,39 @@
 
         function selectHeure(heure) {
           claraState.heure = heure;
+          claraState.step = 'prenom';
+          addBot("Noté ! Pour finaliser votre réservation, quel est votre prénom ? (ex: Sophie)");
+        }
+
+        function collectPrenom(prenom) {
+          claraState.prenom = prenom.trim();
           claraState.step = 'nom';
-          addBot("Noté ! Pour finaliser votre réservation, quel est votre prénom et nom ?");
+          addBot("Merci " + claraState.prenom + " ! Et votre nom de famille ? (ex: Martin)");
         }
 
         function collectNom(nom) {
-          claraState.nom = nom;
+          claraState.nom = claraState.prenom + ' ' + nom.trim();
           claraState.step = 'tel';
-          addBot("Merci " + nom.split(' ')[0] + " ! Votre numéro de téléphone ?");
+          addBot("Parfait " + claraState.prenom + " ! Votre numéro de téléphone ? (ex: 06 12 34 56 78)");
         }
 
         function collectTel(tel) {
+          var digits = tel.replace(/[\s.\-]/g,'');
+          if (!/^(0|\+33)[0-9]{9,10}$/.test(digits)) {
+            addBot("Ce numéro ne semble pas valide. Merci de le resaisir. (ex: 06 12 34 56 78 ou +33 6 12 34 56 78)");
+            return;
+          }
           claraState.tel = tel;
           claraState.step = 'email';
-          addBot("Et votre email pour recevoir la confirmation ?");
+          addBot("Et votre adresse email pour recevoir la confirmation ? (ex: sophie.martin@gmail.com)");
         }
 
         function collectEmail(email) {
-          claraState.email = email;
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+            addBot("Cette adresse email ne semble pas valide. Merci de la resaisir. (ex: sophie.martin@gmail.com)");
+            return;
+          }
+          claraState.email = email.trim();
           claraState.step = 'confirm';
           var b = BOUTIQUES[claraState.boutique];
           var recap = "Voici le récapitulatif de votre rendez-vous :\n\n" +
@@ -989,22 +1011,10 @@
         function confirmRdv() {
           var b = BOUTIQUES[claraState.boutique];
           // Build ISO date from claraState
-          var h = parseInt(claraState.heure.split('h')[0].split(':')[0]);
-          var MOIS = {janvier:0,février:1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,août:7,aout:7,septembre:8,octobre:9,novembre:10,décembre:11,decembre:11};
-          var dateStr = claraState.date.toLowerCase().replace(/[^a-zàâéèêëîïôùûüç0-9\s]/g,'').trim();
-          var parts = dateStr.split(/\s+/);
-          var day = null, month = null;
-          for (var i = 0; i < parts.length; i++) { var n = parseInt(parts[i]); if (!isNaN(n) && n>=1 && n<=31) day=n; if (MOIS[parts[i]]!==undefined) month=MOIS[parts[i]]; }
           var now = new Date();
-          var year = now.getFullYear();
-          if (month !== null && month < now.getMonth()) year++;
-          var rdvDate = (day && month!==null) ? new Date(year,month,day,h,0,0) : new Date(year,now.getMonth(),now.getDate()+1,h,0,0);
-          var offset = rdvDate.getTimezoneOffset()===-120?'+02:00':'+01:00';
-          function pad(n){return String(n).padStart(2,'0');}
-          function toParisISO(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':00:00'+offset;}
-          var rdvEnd = new Date(rdvDate.getTime()+60*60*1000);
-          var startISO = toParisISO(rdvDate);
-          var endISO = toParisISO(rdvEnd);
+          var h = parseInt(claraState.heure.replace('h',''));
+          var startISO = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, h, 0, 0).toISOString();
+          var endISO   = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, h+1, 0, 0).toISOString();
           addBot("Un instant, je confirme votre réservation... ⏳");
           fetch(WEBHOOK_AGENT, {
             method: 'POST',
@@ -1028,8 +1038,8 @@
         }
 
         function showDispos() {
-          claraState.step = 'dispo_boutique';
-          addBotWithChips("Pour quelle boutique souhaitez-vous voir les disponibilités ?", ['🏛 Villiers-le-Bel','🏛 Drancy','🏛 Domont']);
+          addBotWithChips("Prochaines disponibilités à Villiers-le-Bel :\n\n📅 Demain 10h · 11h · 14h30\n📅 Après-demain 9h30 · 15h · 17h\n\nVoulez-vous réserver un créneau ?", ['📅 Réserver à Villiers-le-Bel', '📞 Appeler Drancy', '📞 Appeler Domont']);
+          claraState.step = 'idle';
         }
 
         function showConseil() {
@@ -1088,10 +1098,7 @@
           if(t.includes('Villiers') || t.includes('Drancy') || t.includes('Domont')) {
             if(step === 'boutique' || step === 'dispo_boutique') {
               if(step === 'dispo_boutique') {
-                var bk = t.includes('Villiers') ? 'villiers' : t.includes('Drancy') ? 'drancy' : 'domont';
-                var bDisp = BOUTIQUES[bk];
-                addBotWithChips("Prochaines disponibilités à " + bDisp.name + " :\n\n📅 Demain 10h · 11h · 14h30\n📅 Après-demain 9h30 · 15h · 17h\n\nVoulez-vous réserver un créneau ?", ['📅 Réserver','📞 Appeler ' + bDisp.name]);
-                claraState.step = 'idle';
+                showDispos();
                 return;
               }
               selectBoutique(t); return;
@@ -1108,6 +1115,7 @@
           if(step === 'heure') { selectHeure(t); return; }
 
           // Nom
+          if(step === 'prenom') { collectPrenom(t); return; }
           if(step === 'nom') { collectNom(t); return; }
 
           // Tel
@@ -1126,7 +1134,7 @@
           if(step === 'faq' || t.startsWith('❓')) { answerFaq(t); return; }
 
           // Intent detection
-          if(tl.match(/rdv|rendez.vous|réserv|prendre/)) { startRdvFlow(); }
+          if(tl.match(/rdv|rendez.vous|réserv|prendre|réserver|reserver|reservation|réservation|appointment|booking|créneau|creneau|disponible|dispo/)) { startRdvFlow(); }
           else if(tl.match(/dispo|horaire|quand|créneau|disponib/)) { showDispos(); }
           else if(tl.match(/conseil|visage|forme|style|monture/)) { showConseil(); }
           else if(tl.match(/boutique|adresse|où|magasin|trouv/)) { showBoutiques(); }
