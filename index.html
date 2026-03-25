@@ -1163,10 +1163,11 @@
             }
             var altMatch = claraState._alts && claraState._alts.find(function(a){ return a.label === t; });
             if(altMatch) {
-              claraState.date = altMatch.label;
+              var altParts = altMatch.label.split(' à ');
+              claraState.date = altParts[0];
+              claraState.heure = altParts[1] || t;
               claraState._startISO = altMatch.start;
               claraState._endISO = altMatch.end;
-              claraState.heure = altMatch.label.split(' à ')[1] || t;
               claraState.step = 'prenom';
               addBot("Créneau disponible ✓\n\nQuel est votre prénom ? (ex: Sophie)");
             } else {
