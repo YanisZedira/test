@@ -989,10 +989,22 @@
         function confirmRdv() {
           var b = BOUTIQUES[claraState.boutique];
           // Build ISO date from claraState
+          var h = parseInt(claraState.heure.replace('h','').replace(':',''));
+          var MOIS = {janvier:0,février:1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,août:7,aout:7,septembre:8,octobre:9,novembre:10,décembre:11,decembre:11};
+          var dateStr = claraState.date.toLowerCase().replace(/[^a-zàâéèêëîïôùûüç0-9\s]/g,'').trim();
+          var parts = dateStr.split(/\s+/);
+          var day = null, month = null;
+          for (var i = 0; i < parts.length; i++) { var n = parseInt(parts[i]); if (!isNaN(n) && n>=1 && n<=31) day=n; if (MOIS[parts[i]]!==undefined) month=MOIS[parts[i]]; }
           var now = new Date();
-          var h = parseInt(claraState.heure.replace('h',''));
-          var startISO = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, h, 0, 0).toISOString();
-          var endISO   = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, h+1, 0, 0).toISOString();
+          var year = now.getFullYear();
+          if (month !== null && month < now.getMonth()) year++;
+          var rdvDate = (day && month!==null) ? new Date(year,month,day,h,0,0) : new Date(year,now.getMonth(),now.getDate()+1,h,0,0);
+          var offset = rdvDate.getTimezoneOffset()===-120?'+02:00':'+01:00';
+          function pad(n){return String(n).padStart(2,'0');}
+          function toParisISO(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':00:00'+offset;}
+          var rdvEnd = new Date(rdvDate.getTime()+60*60*1000);
+          var startISO = toParisISO(rdvDate);
+          var endISO = toParisISO(rdvEnd);
           addBot("Un instant, je confirme votre réservation... ⏳");
           fetch(WEBHOOK_AGENT, {
             method: 'POST',
