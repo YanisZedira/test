@@ -831,8 +831,8 @@
         var WEBHOOK_AGENT = 'https://yaniszedira.app.n8n.cloud/webhook/agent-vocal';
 
         // ── ÉTAT CONVERSATION ────────────────────────────────────
-        var claraState = { step:'idle', boutique:null, motif:null, date:null, heure:null, nom:null, prenom:null, email:null, tel:null };
-        function claraReset() { claraState = { step:'idle', boutique:null, motif:null, date:null, heure:null, nom:null, prenom:null, email:null, tel:null }; }
+        var claraState = { step:'idle', boutique:null, motif:null, date:null, heure:null, nom:null, prenom:null, email:null, tel:null, _startISO:null, _endISO:null, _alts:[] };
+        function claraReset() { claraState = { step:'idle', boutique:null, motif:null, date:null, heure:null, nom:null, prenom:null, email:null, tel:null, _startISO:null, _endISO:null, _alts:[] }; }
 
         // ── UTILITAIRES DOM ──────────────────────────────────────
         var header=document.getElementById('header'), backTop=document.getElementById('backTop');
@@ -955,10 +955,56 @@
           addBotWithChips("Parfait ! Quelle heure vous convient ?", ['10h00','11h00','14h00','15h00','16h00','17h00']);
         }
 
+        function buildISO(dateStr, h) {
+          var MOIS = {janvier:0,février:1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,août:7,aout:7,septembre:8,octobre:9,novembre:10,décembre:11,decembre:11};
+          var ds = dateStr.toLowerCase().replace(/[^a-zàâéèêëîïôùûüç0-9\s]/g,'').trim();
+          var parts = ds.split(/\s+/);
+          var day=null, month=null;
+          for(var i=0;i<parts.length;i++){var n=parseInt(parts[i]);if(!isNaN(n)&&n>=1&&n<=31)day=n;if(MOIS[parts[i]]!==undefined)month=MOIS[parts[i]];}
+          var now=new Date(), year=now.getFullYear();
+          if(month!==null&&month<now.getMonth())year++;
+          var d=(day&&month!==null)?new Date(year,month,day,h,0,0):new Date(year,now.getMonth(),now.getDate()+1,h,0,0);
+          function isDST(x){var lsm=new Date(x.getFullYear(),2,31);lsm.setDate(31-lsm.getDay());var lso=new Date(x.getFullYear(),9,31);lso.setDate(31-lso.getDay());return x>=lsm&&x<lso;}
+          var off=isDST(d)?'+02:00':'+01:00';
+          function pad(n){return String(n).padStart(2,'0');}
+          function toISO(x){return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())+'T'+pad(x.getHours())+':00:00'+off;}
+          return {start:toISO(d), end:toISO(new Date(d.getTime()+3600000))};
+        }
+
         function selectHeure(heure) {
           claraState.heure = heure;
-          claraState.step = 'prenom';
-          addBot("Noté ! Pour finaliser votre réservation, quel est votre prénom ? (ex: Sophie)");
+          var h = parseInt(heure.split('h')[0].split(':')[0]);
+          var iso = buildISO(claraState.date, h);
+          claraState._startISO = iso.start;
+          claraState._endISO = iso.end;
+          addBot("Un instant, je vérifie la disponibilité de ce créneau... ⏳");
+          fetch(WEBHOOK_AGENT, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({action:'check', start_time:iso.start, end_time:iso.end})
+          }).then(function(r){return r.json();})
+          .then(function(data){
+            if(data.available===false){
+              var alts=data.alternatives||[];
+              claraState._alts=alts;
+              if(alts.length>0){
+                var chips=alts.map(function(a){return a.label;});
+                chips.push('📅 Autre date');
+                addBotWithChips("Ce créneau est déjà pris. Voici les prochaines disponibilités :", chips);
+                claraState.step='heure_alt';
+              } else {
+                addBotWithChips("Ce créneau est déjà pris. Souhaitez-vous choisir une autre date ?", ['📅 Choisir une autre date']);
+                claraState.step='date';
+              }
+            } else {
+              claraState.step='prenom';
+              addBot("Créneau disponible ✓\n\nPour finaliser votre réservation, quel est votre prénom ? (ex: Sophie)");
+            }
+          })
+          .catch(function(){
+            claraState.step='prenom';
+            addBot("Pour finaliser votre réservation, quel est votre prénom ? (ex: Sophie)");
+          });
         }
 
         function collectPrenom(prenom) {
@@ -975,7 +1021,7 @@
 
         function collectTel(tel) {
           var digits = tel.replace(/[\s.\-]/g,'');
-          if (!/^(0|\+33)[0-9]{9,10}$/.test(digits)) {
+          if(!/^(0|\+33)[0-9]{9,10}$/.test(digits)){
             addBot("Ce numéro ne semble pas valide. Merci de le resaisir. (ex: 06 12 34 56 78)");
             return;
           }
@@ -985,7 +1031,7 @@
         }
 
         function collectEmail(email) {
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+          if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())){
             addBot("Cette adresse email ne semble pas valide. Merci de la resaisir. (ex: sophie.martin@gmail.com)");
             return;
           }
@@ -1003,29 +1049,8 @@
 
         function confirmRdv() {
           var b = BOUTIQUES[claraState.boutique];
-          var h = parseInt(claraState.heure.split('h')[0].split(':')[0]);
-          var MOIS = {janvier:0,février:1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,août:7,aout:7,septembre:8,octobre:9,novembre:10,décembre:11,decembre:11};
-          var dateStr = claraState.date.toLowerCase().replace(/[^a-zàâéèêëîïôùûüç0-9\s]/g,'').trim();
-          var parts = dateStr.split(/\s+/);
-          var day = null, month = null;
-          for (var i = 0; i < parts.length; i++) { var n = parseInt(parts[i]); if (!isNaN(n) && n>=1 && n<=31) day=n; if (MOIS[parts[i]]!==undefined) month=MOIS[parts[i]]; }
-          var now = new Date();
-          var year = now.getFullYear();
-          if (month !== null && month < now.getMonth()) year++;
-          var rdvDate = (day && month!==null) ? new Date(year,month,day,h,0,0) : new Date(year,now.getMonth(),now.getDate()+1,h,0,0);
-          function isDST(d) {
-            var lastSunMarch = new Date(d.getFullYear(), 2, 31);
-            lastSunMarch.setDate(31 - lastSunMarch.getDay());
-            var lastSunOct = new Date(d.getFullYear(), 9, 31);
-            lastSunOct.setDate(31 - lastSunOct.getDay());
-            return d >= lastSunMarch && d < lastSunOct;
-          }
-          var offset = isDST(rdvDate) ? '+02:00' : '+01:00';
-          function pad(n){return String(n).padStart(2,'0');}
-          function toParisISO(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':00:00'+offset;}
-          var rdvEnd = new Date(rdvDate.getTime()+60*60*1000);
-          var startISO = toParisISO(rdvDate);
-          var endISO = toParisISO(rdvEnd);
+          var startISO = claraState._startISO;
+          var endISO = claraState._endISO;
           addBot("Un instant, je confirme votre réservation... ⏳");
           fetch(WEBHOOK_AGENT, {
             method: 'POST',
@@ -1128,8 +1153,32 @@
           // Heure
           if(step === 'heure') { selectHeure(t); return; }
 
-          // Nom
+          // Heure alternative (créneau pris)
+          if(step === 'heure_alt') {
+            if(t === '📅 Autre date' || t === '📅 Choisir une autre date') {
+              claraState.step = 'date_libre';
+              addBot("Quelle date souhaitez-vous ? (ex: lundi 30 mars)");
+              return;
+            }
+            var altMatch = claraState._alts && claraState._alts.find(function(a){ return a.label === t; });
+            if(altMatch) {
+              claraState.date = altMatch.label;
+              claraState._startISO = altMatch.start;
+              claraState._endISO = altMatch.end;
+              claraState.heure = altMatch.label.split(' à ')[1] || t;
+              claraState.step = 'prenom';
+              addBot("Créneau disponible ✓\n\nQuel est votre prénom ? (ex: Sophie)");
+            } else {
+              claraState.step = 'date_libre';
+              addBot("Quelle date souhaitez-vous ? (ex: lundi 30 mars)");
+            }
+            return;
+          }
+
+          // Prénom
           if(step === 'prenom') { collectPrenom(t); return; }
+
+          // Nom
           if(step === 'nom') { collectNom(t); return; }
 
           // Tel
