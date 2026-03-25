@@ -984,8 +984,9 @@
             body:JSON.stringify({action:'check', start_time:iso.start, end_time:iso.end})
           }).then(function(r){return r.json();})
           .then(function(data){
-            if(data.available===false){
-              var alts=data.alternatives||[];
+            var d = Array.isArray(data) ? data[0] : data;
+            if(d.available===false){
+              var alts=d.alternatives||[];
               claraState._alts=alts;
               if(alts.length>0){
                 var chips=alts.map(function(a){return a.label;});
