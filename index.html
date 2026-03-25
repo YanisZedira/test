@@ -957,24 +957,39 @@
 
         function selectHeure(heure) {
           claraState.heure = heure;
+          claraState.step = 'prenom';
+          addBot("Noté ! Pour finaliser votre réservation, quel est votre prénom ? (ex: Sophie)");
+        }
+
+        function collectPrenom(prenom) {
+          claraState.prenom = prenom.trim();
           claraState.step = 'nom';
-          addBot("Noté ! Pour finaliser votre réservation, quel est votre prénom et nom ?");
+          addBot("Merci " + claraState.prenom + " ! Et votre nom de famille ? (ex: Martin)");
         }
 
         function collectNom(nom) {
-          claraState.nom = nom;
+          claraState.nom = claraState.prenom + ' ' + nom.trim();
           claraState.step = 'tel';
-          addBot("Merci " + nom.split(' ')[0] + " ! Votre numéro de téléphone ?");
+          addBot("Parfait " + claraState.prenom + " ! Votre numéro de téléphone ? (ex: 06 12 34 56 78)");
         }
 
         function collectTel(tel) {
+          var digits = tel.replace(/[\s.\-]/g,'');
+          if (!/^(0|\+33)[0-9]{9,10}$/.test(digits)) {
+            addBot("Ce numéro ne semble pas valide. Merci de le resaisir. (ex: 06 12 34 56 78)");
+            return;
+          }
           claraState.tel = tel;
           claraState.step = 'email';
-          addBot("Et votre email pour recevoir la confirmation ?");
+          addBot("Et votre adresse email pour recevoir la confirmation ? (ex: sophie.martin@gmail.com)");
         }
 
         function collectEmail(email) {
-          claraState.email = email;
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+            addBot("Cette adresse email ne semble pas valide. Merci de la resaisir. (ex: sophie.martin@gmail.com)");
+            return;
+          }
+          claraState.email = email.trim();
           claraState.step = 'confirm';
           var b = BOUTIQUES[claraState.boutique];
           var recap = "Voici le récapitulatif de votre rendez-vous :\n\n" +
@@ -1114,6 +1129,7 @@
           if(step === 'heure') { selectHeure(t); return; }
 
           // Nom
+          if(step === 'prenom') { collectPrenom(t); return; }
           if(step === 'nom') { collectNom(t); return; }
 
           // Tel
