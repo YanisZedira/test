@@ -989,7 +989,7 @@
         function confirmRdv() {
           var b = BOUTIQUES[claraState.boutique];
           // Build ISO date from claraState
-          var h = parseInt(claraState.heure.replace('h','').replace(':',''));
+          var h = parseInt(claraState.heure.split('h')[0].split(':')[0]);
           var MOIS = {janvier:0,février:1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,août:7,aout:7,septembre:8,octobre:9,novembre:10,décembre:11,decembre:11};
           var dateStr = claraState.date.toLowerCase().replace(/[^a-zàâéèêëîïôùûüç0-9\s]/g,'').trim();
           var parts = dateStr.split(/\s+/);
