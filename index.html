@@ -220,6 +220,86 @@
         .pm-btn-ghost{display:block;width:100%;text-align:center;padding:14px;background:transparent;color:var(--black);font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;border:1px solid var(--border);margin-top:10px;transition:all .3s;}
         .pm-btn-ghost:hover{border-color:var(--black);}
 
+
+        /* ══ PAGE PRODUIT DÉDIÉE ══ */
+        .product-page{position:fixed;inset:0;background:var(--cream);z-index:8000;overflow-y:auto;opacity:0;visibility:hidden;transform:translateX(30px);transition:all .4s var(--ease);}
+        .product-page.open{opacity:1;visibility:visible;transform:translateX(0);}
+        .pp-nav{position:sticky;top:0;background:rgba(248,246,241,.97);backdrop-filter:blur(20px);border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;z-index:10;gap:20px;}
+        .pp-back{display:flex;align-items:center;gap:8px;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;color:var(--grey-dark);transition:color .3s;background:none;border:none;font-family:inherit;flex-shrink:0;}
+        .pp-back:hover{color:var(--gold);}
+        .pp-breadcrumb{font-size:.65rem;color:var(--grey);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .pp-breadcrumb strong{color:var(--gold);}
+        .pp-body{max-width:1140px;margin:0 auto;padding:50px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+        /* Gallery */
+        .pp-gallery{position:sticky;top:70px;}
+        .pp-main-wrap{background:var(--white);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;padding:50px 30px;min-height:420px;margin-bottom:14px;}
+        .pp-main-img{max-width:100%;max-height:340px;object-fit:contain;mix-blend-mode:multiply;transition:opacity .2s ease;}
+        .pp-thumbs{display:flex;gap:10px;}
+        .pp-thumb{width:68px;height:68px;border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;padding:8px;cursor:pointer;background:var(--white);transition:border-color .2s;flex-shrink:0;}
+        .pp-thumb:hover,.pp-thumb.active{border-color:var(--gold);}
+        .pp-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply;}
+        /* Info */
+        .pp-info-panel{padding-top:8px;}
+        .pp-brand-lbl{font-size:.52rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+        .pp-title{font-family:var(--ff-serif);font-size:clamp(1.7rem,3vw,2.4rem);font-weight:400;margin-bottom:6px;line-height:1.15;}
+        .pp-ref{font-size:.68rem;color:var(--grey-light);margin-bottom:8px;}
+        .pp-rating{display:flex;align-items:center;gap:8px;margin-bottom:26px;}
+        .pp-stars{color:var(--gold);font-size:.78rem;}
+        .pp-rating span{font-size:.7rem;color:var(--grey);}
+        .pp-price-big{font-family:var(--ff-serif);font-size:1.9rem;color:var(--black);margin-bottom:5px;}
+        .pp-price-sub{font-size:.72rem;color:var(--grey);margin-bottom:28px;}
+        .pp-desc-txt{font-size:.88rem;color:var(--grey-dark);line-height:1.9;margin-bottom:26px;border-left:2px solid var(--gold);padding-left:16px;}
+        /* Badges */
+        .pp-badges{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px;}
+        .pp-badge{padding:6px 12px;background:var(--white);border:.5px solid var(--border);font-size:.63rem;color:var(--grey-dark);}
+        /* Colors */
+        .pp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.15em;color:var(--grey);margin-bottom:10px;}
+        .pp-colors{display:flex;gap:9px;margin-bottom:26px;}
+        .pp-color{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+        .pp-color.active,.pp-color:hover{border-color:var(--gold);transform:scale(1.15);}
+        /* Specs */
+        .pp-specs{background:var(--white);border:.5px solid var(--border);margin-bottom:26px;}
+        .pp-spec{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:.5px solid var(--border);font-size:.8rem;}
+        .pp-spec:last-child{border-bottom:none;}
+        .pp-spec .k{color:var(--grey);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;}
+        .pp-spec .v{color:var(--black);}
+        /* Boutiques */
+        .pp-boutique{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border:.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .25s;margin-bottom:7px;}
+        .pp-boutique:hover,.pp-boutique.sel{border-color:var(--gold);background:rgba(184,150,46,.04);}
+        .pp-boutique-name{font-size:.85rem;font-weight:500;margin-bottom:2px;}
+        .pp-boutique-addr{font-size:.7rem;color:var(--grey);}
+        .pp-boutique-hours{font-size:.66rem;color:var(--gold);}
+        .pp-chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+        .pp-boutique.sel .pp-chk{background:var(--gold);border-color:var(--gold);}
+        /* CTAs */
+        .pp-ctas{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+        .pp-btn-main{display:flex;align-items:center;justify-content:center;gap:10px;padding:17px;background:var(--black);color:var(--white);font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;font-weight:500;transition:all .35s var(--ease);border:1px solid var(--black);cursor:pointer;width:100%;}
+        .pp-btn-main:hover{background:var(--gold);border-color:var(--gold);}
+        .pp-btn-ghost{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;background:transparent;color:var(--black);font-size:.66rem;text-transform:uppercase;letter-spacing:.15em;border:1px solid var(--border);transition:all .25s;cursor:pointer;width:100%;}
+        .pp-btn-ghost:hover{border-color:var(--black);}
+        /* Related */
+        .pp-related{max-width:1140px;margin:0 auto;padding:0 40px 60px;}
+        .pp-related-title{font-family:var(--ff-serif);font-size:1.3rem;margin-bottom:28px;padding-top:36px;border-top:.5px solid var(--border);}
+        .pp-rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+        .pp-rel-card{cursor:pointer;transition:transform .3s;}
+        .pp-rel-card:hover{transform:translateY(-4px);}
+        .pp-rel-img{background:var(--white);border:.5px solid var(--border);aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:18px;margin-bottom:10px;}
+        .pp-rel-img img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply;}
+        .pp-rel-brand{font-size:.5rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:2px;}
+        .pp-rel-name{font-family:var(--ff-serif);font-size:.84rem;margin-bottom:3px;}
+        .pp-rel-price{font-size:.74rem;color:var(--grey);}
+        @media(max-width:900px){
+          .pp-body{grid-template-columns:1fr;gap:28px;padding:28px 20px;}
+          .pp-gallery{position:relative;top:0;}
+          .pp-related{padding:0 20px 40px;}
+          .pp-rel-grid{grid-template-columns:repeat(2,1fr);}
+          .pp-nav{padding:0 18px;}
+          .pp-main-wrap{min-height:260px;padding:28px 18px;}
+        }
+        @media(max-width:480px){
+          .pp-rel-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+        }
+
         /* TESTIMONIALS */
         .google-badge{display:inline-flex;align-items:center;gap:12px;background:var(--white);border:.5px solid var(--border);padding:12px 25px;border-radius:8px;margin-top:25px;}
         .g-stars{color:var(--gold);font-size:.85rem;letter-spacing:2px;}
@@ -293,7 +373,7 @@
         .clara-fab-badge{background:var(--gold);color:var(--white);border-radius:50%;width:18px;height:18px;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:600;animation:badgePulse 2s ease infinite;}
         @keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
         .clara-fab.active{background:var(--grey-dark);}
-        .clara-chat{position:fixed;bottom:100px;right:30px;width:390px;height:600px;background:var(--white);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.18);z-index:4000;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(20px) scale(.96);transition:all .4s var(--ease);overflow:hidden;}
+        .clara-chat{position:fixed;bottom:88px;right:30px;width:375px;max-height:calc(100vh - 110px);height:560px;background:var(--white);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.18);z-index:4000;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);transition:all .38s var(--ease);overflow:hidden;}
         .clara-chat.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
         .chat-header{display:flex;align-items:center;padding:18px 20px;background:var(--black);gap:12px;flex-shrink:0;}
         .chat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:var(--ff-serif);font-size:1rem;color:var(--white);}
@@ -385,7 +465,7 @@
             .product-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
             .testimonials-grid{grid-template-columns:1fr;}
             .stats-grid{grid-template-columns:1fr 1fr;}
-            .clara-chat{width:calc(100% - 24px);right:12px;bottom:80px;height:520px;}
+            .clara-chat{width:calc(100% - 24px);right:12px;bottom:74px;height:min(500px,calc(100vh - 100px));}
             .clara-fab{right:16px;bottom:18px;padding:12px 18px;}
             .footer-links{gap:25px;}
             .footer-col{min-width:calc(33% - 18px);}
@@ -574,6 +654,30 @@
             <div class="pm-img"><img id="pmMainImg" src="" alt=""></div>
             <div class="pm-info" id="pmInfo"></div>
         </div>
+    </div>
+
+
+    <!-- PAGE PRODUIT DÉDIÉE -->
+    <div class="product-page" id="productPage">
+      <div class="pp-nav">
+        <button class="pp-back" onclick="closeProductPage()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour à la collection
+        </button>
+        <div class="pp-breadcrumb">House Optic · <strong id="ppBreadText">Collection</strong></div>
+        <div style="width:160px"></div>
+      </div>
+      <div class="pp-body">
+        <div class="pp-gallery">
+          <div class="pp-main-wrap"><img id="ppMainImg" class="pp-main-img" src="" alt=""></div>
+          <div class="pp-thumbs" id="ppThumbs"></div>
+        </div>
+        <div class="pp-info-panel" id="ppInfoPanel"></div>
+      </div>
+      <div class="pp-related">
+        <div class="pp-related-title">Vous pourriez aussi aimer</div>
+        <div class="pp-rel-grid" id="ppRelGrid"></div>
+      </div>
     </div>
 
     <!-- TEMOIGNAGES -->
@@ -773,7 +877,7 @@ var INTENT_MAP=[
   {pattern:/lentille|lentilles|contact|verre.*contact/i, intent:'lentilles'},
   {pattern:/visagiste|visagism|forme.*visage|morphologie|conseil.*monture|conseiller/i, intent:'visagisme'},
   {pattern:/répar|réparer|cass|abîm|branche|ressort|charnière/i, intent:'reparation'},
-  {pattern:/erman|ermane|gérant|responsable|directeur|patron|manager/i, intent:'contact_erman'},
+  {pattern:/erman|ermane|gérant|responsable|directeur|patron|manager|partenariat|collaboration|presse/i, intent:'contact_erman'},
   {pattern:/équipe|staff|vendeur|opticien|collaborateur/i, intent:'equipe'},
   {pattern:/villiers/i, intent:'boutique_villiers'},
   {pattern:/drancy/i, intent:'boutique_drancy'},
@@ -787,7 +891,19 @@ var INTENT_MAP=[
   {pattern:/solaire|sun|été|plage|uv|polarisé/i, intent:'solaire'},
   {pattern:/enfant|junior|kid|bébé|adolescent/i, intent:'enfant'},
   {pattern:/sport|running|vélo|natation|ski/i, intent:'sport'},
-  {pattern:/aide|help|besoin|perdu|comprends.pas/i, intent:'help'}
+  {pattern:/aide|help|besoin|perdu|comprends.pas|information|renseign/i, intent:'help'},
+  {pattern:/allergie|nickel|sensible.*peau|acétate.*allergi/i, intent:'allergie'},
+  {pattern:/anti.reflet|photochromique|transitions|anti.*lumière|anti.*bleu|traitement.*verre/i, intent:'traitements'},
+  {pattern:/progressif|progressives|presbytie/i, intent:'progressif'},
+  {pattern:/délai|livraison|quand.*prêt|fabrication|temps.*attente/i, intent:'delais'},
+  {pattern:/deuxième.*paire|2ème.*paire|double.*paire|seconde.*paire/i, intent:'copie'},
+  {pattern:/histoire|depuis quand|fondé|fondation|créé.*boutiqu/i, intent:'histoire'},
+  {pattern:/urgent|urgence|cassé.*urgent|répar.*urgent/i, intent:'urgence'},
+  {pattern:/carte|paiement|cb|espèces|chèque|moyen.*paiement/i, intent:'paiement'},
+  {pattern:/vol.*lunette|perdu.*lunette|assurance.*lunette|casse.*lunette/i, intent:'assurance'},
+  {pattern:/instagram|réseaux.*social|facebook|tiktok/i, intent:'social'},
+  {pattern:/devis|estimation|coût.*approximatif/i, intent:'devis'},
+  {pattern:/quel.*meilleur|recommande.*quoi|conseille.*lunette|qu.*choisir|comment.*choisir/i, intent:'conseil_achat'}
 ];
 
 function detectIntent(text){
@@ -905,7 +1021,7 @@ function generateResponse(userText){
       return {text:"Service réparation & réglage :\n\n🔧 Réparation de branches cassées\n⚙️ Remplacement de charnières et visseries\n🔩 Réglage personnalisé de la monture\n👓 Remplacement de plaquettes nasales\n\nService disponible même pour les lunettes achetées ailleurs ! Devis gratuit en boutique. Apportez simplement vos lunettes !"};
 
     case 'contact_erman':
-      return {text:"Vous souhaitez joindre Erman, notre gérant ?\n\nPuis-je vous demander l'objet de votre démarche ? C'est pour vous orienter au mieux :\n\n• Question sur un produit ou une commande → notre équipe peut vous aider directement\n• Partenariat ou affaire professionnelle → Erman est disponible en boutique\n• Réclamation ou situation particulière → Erman peut vous rappeler\n\nQuelle est la raison de votre contact ?",chips:['Question produit','Partenariat professionnel','Réclamation','Autre raison']};
+      return {text:"Vous souhaitez joindre Erman, notre gérant ?\n\nQuel est l'objet de votre démarche ?",chips:['Question produit','Partenariat / B2B','Collaboration & Presse','Réclamation','Urgence']};
 
     case 'equipe':
       return {text:"L'équipe House Optic :\n\n👤 Erman — Gérant, Villiers-le-Bel\n✨ Sandra — Visagiste experte, Villiers-le-Bel\n😊 Manu — Conseil montures, Villiers-le-Bel\n🔵 Ben — Spécialiste lentilles, Drancy\n✦ Chaira — Visagiste, Villiers-le-Bel\n\nUne équipe passionnée à votre service, 6 jours sur 7 !"};
@@ -940,16 +1056,41 @@ function generateResponse(userText){
     case 'help':
       return {text:"Je suis là pour vous aider ! Voici ce que je peux faire pour vous :\n\n📍 Vous indiquer nos adresses et horaires\n🕐 Vérifier nos disponibilités\n👓 Vous présenter nos collections et marques\n💰 Vous renseigner sur les tarifs et remboursements\n✨ Vous conseiller sur le visagisme\n📞 Vous mettre en contact avec la bonne boutique\n\nQue souhaitez-vous savoir ?",chips:['Nos boutiques','Nos marques','Tarifs','Conseils lunettes']};
 
+    case 'allergie':
+      return {text:"Nous proposons des montures hypoallergéniques :\n\n✦ Titane — légèreté maximale, 100% hypoallergénique\n✦ Acétate haut de gamme — sans nickel\n✦ TR-90 — flexible, résistant, sans métaux\n\nSignalez votre sensibilité en boutique, nos conseillers vous orientent vers les matières adaptées !",chips:['Nos boutiques','Conseils visagiste']};
+    case 'traitements':
+      return {text:"Les traitements verres disponibles :\n\n✦ Anti-reflets — confort visuel indispensable\n✦ Anti-lumière bleue — protection écrans & LED\n✦ Photochromiques (Transitions) — verres qui s'adaptent à la luminosité\n✦ Durcissant — résistance aux rayures\n✦ UV400 — protection solaire totale\n\nNos opticiens vous conseillent les traitements adaptés à votre mode de vie !",chips:['Prendre rendez-vous','Nos boutiques']};
+    case 'progressif':
+      return {text:"Les verres progressifs chez House Optic :\n\n👁️ Solution idéale pour la presbytie (difficultés vision de près après 40-45 ans)\n✦ Vision nette de près, de loin ET intermédiaire\n✦ Adaptation personnalisée par nos opticiens\n✦ Pris en charge selon votre mutuelle\n\nUn bilan de vue complet est nécessaire — 30 min, gratuit avec mutuelle.",chips:['Nos boutiques','Tarifs & remboursements']};
+    case 'delais':
+      return {text:"Délais de fabrication :\n\n⏱ Lunettes standards : 7 à 14 jours\n⏱ Verres progressifs ou forts : 10 à 21 jours\n⏱ Montures en stock : parfois sous 48h\n\nNous vous prévenons dès que vos lunettes sont prêtes — SMS automatique !",chips:['Nos boutiques','Nous contacter']};
+    case 'copie':
+      return {text:"Vous souhaitez une deuxième paire ?\n\nC'est tout à fait possible avec votre ordonnance actuelle. Certaines mutuelles remboursent même deux paires par an.\n\nPassez en boutique avec votre ordonnance et on vous fait le meilleur devis !",chips:['Nos boutiques','Tarifs & remboursements']};
+    case 'histoire':
+      return {text:"House Optic, une histoire de passion 🏆\n\nFondée en 2005 par Erman, House Optic est aujourd'hui une référence de l'optique de luxe en Île-de-France.\n\n✦ 3 boutiques · +15 000 clients · 120+ marques · 4,9★ sur 281 avis Google\n\n20 ans d'expertise au service de votre regard.",chips:['Nos boutiques','Nos collections']};
+    case 'urgence':
+      return {text:"Pour une urgence optique :\n\n📞 Villiers-le-Bel : 01 39 85 90 17 (Lun–Sam 9h30–19h30)\n📞 Drancy : 01 48 30 67 48 (Mar–Sam 9h30–19h00)\n📞 Domont : 01 39 35 90 98 (Mar–Sam 9h30–19h30)\n\nAppellez directement — nous faisons tout pour vous recevoir rapidement !",chips:['Appeler Villiers-le-Bel','Appeler Drancy','Appeler Domont']};
+    case 'paiement':
+      return {text:"Moyens de paiement acceptés :\n\n💳 Carte bancaire (CB, Visa, Mastercard)\n💵 Espèces\n📱 Paiement sans contact\n🏦 Tiers payant mutuelle (direct, zéro avance)\n💳 Financement en plusieurs fois disponible",chips:['Tarifs & remboursements','Nos boutiques']};
+    case 'assurance':
+      return {text:"Lunettes perdues ou volées ?\n\n1. Vérifiez votre contrat mutuelle — certains couvrent la perte ou le vol\n2. Déclarez le sinistre auprès de votre mutuelle\n3. Revenez nous voir avec la prise en charge\n\nPour les garanties casse, notre SAV est disponible en boutique !",chips:['Nos boutiques','Garantie SAV']};
+    case 'social':
+      return {text:"Retrouvez House Optic sur Instagram 📸\n\n👉 @house_optic\nNouvelles collections, conseils visagistes, actualités boutique.\n\nSuivez-nous pour ne rien manquer !",chips:['Nos collections','Nos boutiques']};
+    case 'devis':
+      return {text:"Pour un devis précis, nous avons besoin de :\n\n📋 Votre ordonnance optique\n💳 Votre attestation mutuelle\n🎨 Vos préférences (marque, style, matière)\n\nVenez en boutique ou appelez-nous — devis gratuit et sans engagement !",chips:['Nos boutiques','Nous contacter']};
+    case 'conseil_achat':
+      return {text:"Pour choisir les lunettes parfaites :\n\n👤 Visage ovale → toutes formes · Rond → rectangulaire · Carré → ovale · Allongé → oversize\n🎨 Teint clair → montures claires ou dorées\n🌟 Style discret → Prada, Tom Ford · Style affirmé → Gucci, Versace · Intemporel → Ray-Ban\n\nLe mieux ? Venez essayer ! Notre visagiste trouve LA monture faite pour vous — gratuit !",chips:['Conseils visagiste','Voir nos collections','Nos boutiques']};
     default:
       // Recherche dans les produits
       var found=PRODUCTS.filter(function(p){
-        return t.includes(p.brand.toLowerCase())||t.includes(p.name.toLowerCase());
+        var pl=p.brand.toLowerCase()+' '+p.name.toLowerCase()+' '+p.cat+' '+p.gender+' '+p.forme.toLowerCase();
+        return t.includes(p.brand.toLowerCase())||t.includes(p.name.toLowerCase())||pl.split(' ').some(function(w){return w.length>3&&t.includes(w);});
       });
       if(found.length>0){
         var p=found[0];
         return {text:"Concernant la "+p.brand+" "+p.name+" ("+p.price+") :\n\n"+p.desc+"\n\n📐 Forme : "+p.forme+"\n🔧 Matière : "+p.material+"\n✅ Disponible en boutique House Optic\n\nVoulez-vous voir la fiche complète ?",chips:['Voir la fiche','Disponibilité en boutique'],product:p};
       }
-      return {text:"Je n'ai pas tout à fait saisi votre question. 😊\n\nPuis-je vous aider sur :\n• Nos horaires et adresses\n• Nos marques et collections\n• Les tarifs et remboursements\n• Un conseil visagiste\n• Contacter une boutique",chips:['Nos boutiques','Nos collections','Tarifs','Conseils']};
+      return {text:"Je suis Clara, votre conseillère House Optic. Je suis là pour vous aider sur tout ce qui concerne nos boutiques, collections et services. 😊\n\nComment puis-je vous aider ?",chips:['Nos boutiques & horaires','Nos collections','Tarifs & remboursements','Conseil visagiste']};
   }
 }
 
@@ -982,7 +1123,8 @@ window.toggleClara=function(){
     chat.classList.add('open');fab.classList.add('active');
     ic.style.display='none';ix.style.display='block';
     badge.style.display='none';label.style.display='none';
-    document.body.classList.add('no-scroll');
+    // Only lock scroll on mobile
+    if(window.innerWidth<=600) document.body.classList.add('no-scroll');
     if(!chatStarted){
       chatStarted=true;
       setTimeout(function(){
@@ -993,7 +1135,7 @@ window.toggleClara=function(){
   }else{
     chat.classList.remove('open');fab.classList.remove('active');
     ic.style.display='block';ix.style.display='none';
-    document.body.classList.remove('no-scroll');
+    if(window.innerWidth<=600) document.body.classList.remove('no-scroll');
   }
 };
 window.openClara=function(){if(!claraOpen)toggleClara();};
@@ -1023,6 +1165,23 @@ function addBot(text){
   });
 }
 
+var SUGGESTIONS_POOL=[
+  ['Nos horaires','Nos collections','Tarifs & remboursements'],
+  ['Conseils visagiste','Nos boutiques','Prendre RDV'],
+  ['Nos marques','Remboursement mutuelle','Examen de vue'],
+  ['Prada','Gucci','Ray-Ban','Tom Ford'],
+  ['Boutique Villiers','Boutique Drancy','Boutique Domont'],
+  ['Tiers payant','Ordonnance','Lentilles de contact'],
+  ['Réparation','Garantie','Financement'],
+  ['Conseils achat','Visagisme','Collections solaires']
+];
+var _suggIdx=0;
+function getNextSuggestions(){
+  var s=SUGGESTIONS_POOL[_suggIdx%SUGGESTIONS_POOL.length];
+  _suggIdx++;
+  return s;
+}
+
 function addBotWithChips(text,chips,product){
   var m=document.getElementById('chatMessages');
   var typing=document.createElement('div');
@@ -1047,21 +1206,28 @@ function addBotWithChips(text,chips,product){
       card.innerHTML='<div class="plc-img"><img src="'+product.img+'" alt="'+product.brand+'" loading="lazy"></div><div><div class="plc-brand">'+product.brand+'</div><div class="plc-name">'+product.name+'</div><div class="plc-price">'+product.price+'</div></div><div class="plc-arrow">→</div>';
       m.appendChild(card);
     }
-    if(chips&&chips.length){
+    // Render main chips
+    var allChips = chips||[];
+    // If few chips, append rotation suggestions
+    var extras=[];
+    if(allChips.length<3){
+      var sugg=getNextSuggestions();
+      sugg.forEach(function(s){ if(allChips.indexOf(s)===-1) extras.push(s); });
+    }
+    var combined=allChips.concat(extras.slice(0,3-allChips.length));
+    if(combined.length>0){
       var row=document.createElement('div');
       row.className='chip-row';
-      chips.forEach(function(c){
+      combined.forEach(function(c){
+        var btn=document.createElement('button');
+        btn.className='quick-btn';
+        btn.textContent=c;
         if(c==='Voir la fiche produit'||c==='Voir la fiche'){
-          if(product){
-            var btn=document.createElement('button');btn.className='quick-btn';btn.textContent=c;
-            btn.onclick=function(){openProduct(product);row.remove();};
-            row.appendChild(btn);
-          }
+          if(product) btn.onclick=(function(p,r){return function(){openProduct(p);r.remove();};})(product,row);
         } else {
-          var btn=document.createElement('button');btn.className='quick-btn';btn.textContent=c;
-          btn.onclick=function(){handleChip(c);row.remove();};
-          row.appendChild(btn);
+          btn.onclick=(function(chip,r){return function(){r.remove();handleChip(chip);};})(c,row);
         }
+        row.appendChild(btn);
       });
       m.appendChild(row);
     }
@@ -1157,33 +1323,50 @@ window.closeModalBtn=function(){
 
 /* ── GESTION CONTACT ERMAN ── */
 function handleErmanContact(reason){
-  var safeReasons=['Question produit','Partenariat professionnel','Réclamation'];
-  if(safeReasons.indexOf(reason)===-1&&reason!=='Autre raison'){
-    addBotWithChips("Je transmets votre demande à Erman.\n\nPuis-je avoir votre nom et numéro de téléphone afin qu'il puisse vous rappeler ?",[]);
+  if(reason==='Question produit'){
+    addBotWithChips("Pour une question produit, je peux vous aider directement !",['Nos marques disponibles','Prix et remboursements','Conseils visagiste']);
     return;
   }
-  if(reason==='Partenariat professionnel'||reason==='Réclamation'||reason==='Autre raison'){
-    addBotWithChips("Très bien. Pour contacter Erman directement :\n\n📞 01 39 85 90 17 (Villiers-le-Bel)\n\nMentionnez que vous souhaitez parler à Erman en précisant votre demande. Il sera disponible pendant les heures d'ouverture (Lun–Sam 9h30–19h30).",[]);
-  } else {
-    var resp=generateResponse('question marque produit');
-    addBotWithChips(resp.text,resp.chips||[]);
+  if(reason==='Partenariat / B2B'){
+    addBotWithChips("Pour un partenariat commercial, contactez Erman directement :\n\n📞 01 39 85 90 17 (Villiers-le-Bel)\n⏰ Lun–Sam 9h30–19h30\n\nMentionnez \"partenariat professionnel\" à l'accueil.",['Appeler Villiers-le-Bel']);
+    return;
   }
+  if(reason==='Collaboration & Presse'){
+    addBotWithChips("House Optic est ouvert aux collaborations presse et influenceurs.\n\n📞 01 39 85 90 17 — mentionnez \"collaboration\" en appelant.\nErman vous rappelle dans la journée.",['Appeler maintenant']);
+    return;
+  }
+  if(reason==='Réclamation'){
+    addBotWithChips("Je suis désolée. Erman traite toutes les réclamations personnellement.\n\n📞 01 39 85 90 17 (Villiers-le-Bel)\n⏰ Lun–Sam 9h30–19h30\n\nVous pouvez aussi venir directement en boutique — c'est souvent la solution la plus rapide.",['Appeler Villiers-le-Bel','Nos boutiques']);
+    return;
+  }
+  if(reason==='Urgence'){
+    addBotWithChips("Pour toute urgence :\n\n📞 Villiers-le-Bel : 01 39 85 90 17\n📞 Drancy : 01 48 30 67 48\n📞 Domont : 01 39 35 90 98",['Appeler Villiers-le-Bel','Appeler Drancy','Appeler Domont']);
+    return;
+  }
+  addBotWithChips("Pour joindre Erman :\n\n📞 01 39 85 90 17 (Villiers-le-Bel)\n⏰ Lun–Sam 9h30–19h30",['Appeler Villiers-le-Bel']);
 }
 
 /* ── RENDU PRODUITS ── */
 function renderProducts(f){
   var g=document.getElementById('productGrid');
   var items=f==='all'?PRODUCTS:PRODUCTS.filter(function(p){return p.cat===f||p.gender===f;});
+  if(!items.length){g.innerHTML='<p style="grid-column:1/-1;text-align:center;color:var(--grey);padding:40px;">Aucun produit dans cette catégorie.</p>';return;}
   g.innerHTML=items.map(function(p){
-    return '<div class="product-card reveal visible" onclick="openProduct('+JSON.stringify(p).replace(/"/g,'&quot;')+')">'+(p.badge?'<div style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:0"></div>':'')+
+    return '<div class="product-card reveal visible" data-pid="'+p.id+'" style="cursor:pointer">'+
       '<div class="product-img-wrap">'+(p.badge?'<span class="product-badge">'+p.badge+'</span>':'')+
       '<div class="product-wishlist">♡</div>'+
-      '<img src="'+p.img+'" alt="'+p.brand+' '+p.name+'" loading="lazy"></div>'+
+      '<img src="'+p.img+'" alt="'+p.brand+' '+p.name+'" loading="lazy" onerror="this.style.opacity=0.3"></div>'+
       '<div class="product-brand">'+p.brand+'</div>'+
       '<div class="product-name">'+p.name+'</div>'+
       '<div class="product-price">'+p.price+'</div>'+
-      '<div class="product-cta">Voir la fiche →</div></div>';
+      '<div class="product-cta">Voir la fiche complète →</div></div>';
   }).join('');
+  // Attach click handlers properly
+  g.querySelectorAll('.product-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      openProductPage(this.dataset.pid);
+    });
+  });
 }
 renderProducts('all');
 document.querySelectorAll('.filter-btn').forEach(function(b){
@@ -1192,6 +1375,203 @@ document.querySelectorAll('.filter-btn').forEach(function(b){
     this.classList.add('active');renderProducts(this.dataset.filter);
   });
 });
+
+/* ══════════════════════════════════════════════
+   PAGE PRODUIT DÉDIÉE
+══════════════════════════════════════════════ */
+var _currentPP = null;
+var _ppBoutiqueTel = BOUTIQUES.villiers.tel;
+
+function openProductPage(id){
+  var p = PRODUCTS.find(function(x){return x.id===id;});
+  if(!p) return;
+  _currentPP = p;
+  history.pushState({ppId:id},'',window.location.pathname+'#produit-'+id);
+  _buildPP(p);
+  document.getElementById('productPage').classList.add('open');
+  document.body.classList.add('no-scroll');
+  document.getElementById('productPage').scrollTop=0;
+}
+
+function closeProductPage(){
+  var pp=document.getElementById('productPage');
+  if(!pp.classList.contains('open')) return;
+  pp.classList.remove('open');
+  document.body.classList.remove('no-scroll');
+  history.pushState({},'',window.location.pathname);
+  _currentPP = null;
+  // Scroll to collection section smoothly
+  setTimeout(function(){
+    var sec=document.getElementById('collection');
+    if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+  },50);
+}
+
+window.addEventListener('popstate', function(e){
+  var pp=document.getElementById('productPage');
+  if(e.state && e.state.ppId){
+    var p=PRODUCTS.find(function(x){return x.id===e.state.ppId;});
+    if(p){ _currentPP=p; _buildPP(p); pp.classList.add('open'); document.body.classList.add('no-scroll'); pp.scrollTop=0; }
+  } else {
+    if(pp.classList.contains('open')){
+      pp.classList.remove('open');
+      document.body.classList.remove('no-scroll');
+      _currentPP=null;
+      setTimeout(function(){
+        var sec=document.getElementById('collection');
+        if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+      },50);
+    }
+  }
+});
+
+// Handle direct URL hash on load
+(function(){
+  var h=window.location.hash;
+  if(h && h.indexOf('#produit-')===0){
+    var id=h.replace('#produit-','');
+    setTimeout(function(){openProductPage(id);},500);
+  }
+})();
+
+function _buildPP(p){
+  // Breadcrumb
+  document.getElementById('ppBreadText').textContent = p.brand+' '+p.name;
+  // Main image
+  var mi=document.getElementById('ppMainImg');
+  mi.src=p.img; mi.alt=p.brand+' '+p.name;
+  // Thumbs (reuse imgs array, add main as first)
+  var thumbsEl=document.getElementById('ppThumbs');
+  thumbsEl.innerHTML=p.imgs.map(function(src,i){
+    return '<div class="pp-thumb'+(i===0?' active':'')+'" data-src="'+src+'">'
+      +'<img src="'+src+'" alt="" loading="lazy"></div>';
+  }).join('');
+  thumbsEl.querySelectorAll('.pp-thumb').forEach(function(t){
+    t.addEventListener('click', function(){
+      thumbsEl.querySelectorAll('.pp-thumb').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      mi.style.opacity='0';
+      setTimeout(function(){mi.src=t.dataset.src; mi.style.opacity='1';},180);
+    });
+  });
+  // Reset boutique
+  _ppBoutiqueTel = BOUTIQUES.villiers.tel;
+  // Build boutiques html
+  var boutiquesArr = [
+    {key:'villiers', b:BOUTIQUES.villiers},
+    {key:'drancy',   b:BOUTIQUES.drancy},
+    {key:'domont',   b:BOUTIQUES.domont}
+  ];
+  var boutiqueHtml = boutiquesArr.map(function(entry,i){
+    var b=entry.b;
+    var isSel=(i===0);
+    return '<div class="pp-boutique'+(isSel?' sel':'')+'" data-tel="'+b.tel+'">'
+      +'<div><div class="pp-boutique-name">'+b.name+'</div>'
+      +'<div class="pp-boutique-addr">'+b.addr+'</div>'
+      +'<div class="pp-boutique-hours">'+b.hours+'</div></div>'
+      +'<div class="pp-chk">'+(isSel?'<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div>'
+    +'</div>';
+  }).join('');
+  // Colours
+  var colorsHtml=p.couleurs.map(function(col,i){
+    return '<div class="pp-color'+(i===0?' active':'')+'" style="background:'+col+'" title="Coloris '+(i+1)+'"></div>';
+  }).join('');
+  // Badges
+  var badges=['✦ UV400 certifié','✦ Garantie fabricant','✦ Tiers payant accepté','✦ Essayage gratuit'];
+  if(p.badge) badges.unshift('✦ '+p.badge);
+  if(p.usage==='Solaire') badges.splice(1,0,'✦ Verres polarisés');
+  var badgesHtml=badges.map(function(b){return '<div class="pp-badge">'+b+'</div>';}).join('');
+  // Related
+  var related=PRODUCTS.filter(function(x){return x.id!==p.id&&(x.gender===p.gender||x.cat===p.cat);}).slice(0,4);
+  var relHtml=related.map(function(r){
+    return '<div class="pp-rel-card" data-pid="'+r.id+'">'
+      +'<div class="pp-rel-img"><img src="'+r.img+'" alt="'+r.brand+'" loading="lazy"></div>'
+      +'<div class="pp-rel-brand">'+r.brand+'</div>'
+      +'<div class="pp-rel-name">'+r.name+'</div>'
+      +'<div class="pp-rel-price">'+r.price+'</div>'
+    +'</div>';
+  }).join('');
+  // Info panel
+  document.getElementById('ppInfoPanel').innerHTML =
+    '<div class="pp-brand-lbl">'+p.brand+'</div>'
+    +'<h1 class="pp-title">'+p.name+'</h1>'
+    +'<div class="pp-ref">Réf. '+p.id.toUpperCase()+' · '+(p.cat==='vue'?'Lunettes de vue':'Lunettes solaires')+' · '+(p.gender==='femme'?'Femme':'Homme')+'</div>'
+    +'<div class="pp-rating"><span class="pp-stars">★★★★★</span><span>4.9/5 · 281 avis House Optic</span></div>'
+    +'<div class="pp-price-big">'+p.price+'</div>'
+    +'<div class="pp-price-sub">Monture seule · Verres selon correction · Tiers payant intégral</div>'
+    +'<p class="pp-desc-txt">'+p.desc+'</p>'
+    +'<div class="pp-badges">'+badgesHtml+'</div>'
+    +'<div class="pp-lbl">Coloris disponibles</div>'
+    +'<div class="pp-colors" id="ppColors">'+colorsHtml+'</div>'
+    +'<div class="pp-specs">'
+      +'<div class="pp-spec"><span class="k">Forme</span><span class="v">'+p.forme+'</span></div>'
+      +'<div class="pp-spec"><span class="k">Matière</span><span class="v">'+p.material+'</span></div>'
+      +'<div class="pp-spec"><span class="k">Usage</span><span class="v">'+p.usage+'</span></div>'
+      +'<div class="pp-spec"><span class="k">Genre</span><span class="v">'+(p.gender==='femme'?'Femme':p.gender==='homme'?'Homme':'Mixte')+'</span></div>'
+      +'<div class="pp-spec"><span class="k">Protection UV</span><span class="v">UV400 certifié</span></div>'
+    +'</div>'
+    +'<div class="pp-lbl">Disponible en boutique</div>'
+    +'<div id="ppBoutiques">'+boutiqueHtml+'</div>'
+    +'<div class="pp-ctas">'
+      +'<button class="pp-btn-main" id="ppBtnCall">📞 Réserver un essayage</button>'
+      +'<button class="pp-btn-ghost" id="ppBtnClara">💬 Demander à Clara</button>'
+    +'</div>';
+
+  // Attach boutique click
+  document.getElementById('ppBoutiques').querySelectorAll('.pp-boutique').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.getElementById('ppBoutiques').querySelectorAll('.pp-boutique').forEach(function(x){
+        x.classList.remove('sel');
+        var chk=x.querySelector('.pp-chk'); if(chk) chk.innerHTML='';
+      });
+      this.classList.add('sel');
+      _ppBoutiqueTel=this.dataset.tel;
+      var chk=this.querySelector('.pp-chk');
+      if(chk) chk.innerHTML='<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>';
+    });
+  });
+  // Attach color click
+  document.getElementById('ppColors').querySelectorAll('.pp-color').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.getElementById('ppColors').querySelectorAll('.pp-color').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+    });
+  });
+  // Attach CTA buttons
+  document.getElementById('ppBtnCall').addEventListener('click', function(){
+    window.location.href='tel:'+_ppBoutiqueTel;
+  });
+  document.getElementById('ppBtnClara').addEventListener('click', function(){
+    closeProductPage();
+    setTimeout(function(){
+      openClara();
+      if(_currentPP){
+        var pp=_currentPP;
+        setTimeout(function(){
+          addUser('Je veux des informations sur la '+pp.brand+' '+pp.name);
+          var resp=generateResponse(pp.brand.toLowerCase());
+          if(resp && resp.product) addBotWithChips(resp.text,resp.chips||[],resp.product);
+          else if(resp) addBotWithChips(resp.text,resp.chips||[]);
+        },400);
+      }
+    },350);
+  });
+  // Related cards
+  document.getElementById('ppRelGrid').innerHTML=relHtml;
+  document.getElementById('ppRelGrid').querySelectorAll('.pp-rel-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      var pid=this.dataset.pid;
+      document.getElementById('productPage').scrollTop=0;
+      var rp=PRODUCTS.find(function(x){return x.id===pid;});
+      if(rp){ _currentPP=rp; _buildPP(rp); history.pushState({ppId:pid},'',window.location.pathname+'#produit-'+pid); }
+    });
+  });
+}
+
+/* Legacy compat - openProduct still works from chat */
+window.openProduct = function(p){ openProductPage(p.id||p); };
+window.closeModal = function(){};
+window.closeModalBtn = function(){};
 
 /* ── UTILITAIRES ── */
 var header=document.getElementById('header'),backTop=document.getElementById('backTop');
@@ -1219,9 +1599,16 @@ window.declineCookies=function(){localStorage.setItem('ho_cookies','0');document
 if(!localStorage.getItem('ho_cookies'))setTimeout(function(){document.getElementById('cookieBanner').classList.add('show');},2500);
 
 /* Chip handler */
+var ERMAN_CHIPS=['Question produit','Partenariat / B2B','Collaboration & Presse','Réclamation','Urgence','Partenariat professionnel','Autre raison'];
 function handleChip(c){
-  if(c==='Partenariat professionnel'||c==='Réclamation'||c==='Autre raison'||c==='Question produit') handleErmanContact(c);
-  else { addUser(c); var r=generateResponse(c); if(r.product) addBotWithChips(r.text,r.chips||[],r.product); else addBotWithChips(r.text,r.chips||[]); }
+  if(ERMAN_CHIPS.indexOf(c)!==-1){ addUser(c); handleErmanContact(c); return; }
+  if(c==='Appeler Villiers-le-Bel'||c==='Appeler maintenant'){ addUser(c); window.location.href='tel:+33139859017'; return; }
+  if(c==='Appeler Drancy'){ addUser(c); window.location.href='tel:+33148306748'; return; }
+  if(c==='Appeler Domont'){ addUser(c); window.location.href='tel:+33139359098'; return; }
+  addUser(c);
+  var r=generateResponse(c);
+  if(r.product) addBotWithChips(r.text,r.chips||[],r.product);
+  else addBotWithChips(r.text,r.chips||[]);
 }
 
 })();
