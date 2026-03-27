@@ -367,13 +367,13 @@
         .footer-social a:hover{color:var(--white);}
 
         /* CHATBOT */
-        .clara-fab{position:fixed;bottom:30px;right:30px;z-index:4000;display:flex;align-items:center;gap:12px;background:var(--black);color:var(--white);border-radius:50px;padding:14px 22px;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:all .4s var(--ease);cursor:pointer;}
+        .clara-fab{position:fixed;bottom:28px;right:28px;z-index:6000;display:flex;align-items:center;gap:12px;background:var(--black);color:var(--white);border-radius:50px;padding:13px 20px;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:all .4s var(--ease);cursor:pointer;}
         .clara-fab:hover{background:var(--gold);transform:translateY(-3px);box-shadow:var(--shadow-gold);}
         .clara-fab-label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
         .clara-fab-badge{background:var(--gold);color:var(--white);border-radius:50%;width:18px;height:18px;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:600;animation:badgePulse 2s ease infinite;}
         @keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
         .clara-fab.active{background:var(--grey-dark);}
-        .clara-chat{position:fixed;bottom:88px;right:30px;width:375px;max-height:calc(100vh - 110px);height:560px;background:var(--white);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.18);z-index:4000;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);transition:all .38s var(--ease);overflow:hidden;}
+        .clara-chat{position:fixed;bottom:92px;right:28px;width:370px;height:min(555px,calc(118vh - 188px));background:var(--white);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.18);z-index:6000;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(12px) scale(.97);transition:all .38s var(--ease);overflow:hidden;}
         .clara-chat.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
         .chat-header{display:flex;align-items:center;padding:18px 20px;background:var(--black);gap:12px;flex-shrink:0;}
         .chat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:var(--ff-serif);font-size:1rem;color:var(--white);}
@@ -465,13 +465,15 @@
             .product-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
             .testimonials-grid{grid-template-columns:1fr;}
             .stats-grid{grid-template-columns:1fr 1fr;}
-            .clara-chat{width:calc(100% - 24px);right:12px;bottom:74px;height:min(500px,calc(100vh - 100px));}
-            .clara-fab{right:16px;bottom:18px;padding:12px 18px;}
+            .clara-chat{width:calc(100% - 32px);right:16px;bottom:76px;height:min(480px,calc(100vh - 146px));border-radius:14px;}
+            .clara-fab{right:16px;bottom:16px;padding:12px 18px;}
             .footer-links{gap:25px;}
             .footer-col{min-width:calc(33% - 18px);}
             .b-info{padding:35px 25px;}
         }
         @media(max-width:640px){
+            .clara-chat{width:100%;right:0;bottom:0;border-radius:16px 16px 0 0;height:min(520px,calc(100vh - 90px));}
+            .clara-fab{right:16px;bottom:16px;}
             .product-grid{grid-template-columns:1fr 1fr;gap:10px;}
             .services-grid{grid-template-columns:1fr 1fr;gap:12px;}
             .service-card{padding:28px 16px;}
@@ -660,7 +662,7 @@
     <!-- PAGE PRODUIT DÉDIÉE -->
     <div class="product-page" id="productPage">
       <div class="pp-nav">
-        <button class="pp-back" onclick="closeProductPage()">
+        <button class="pp-back" onclick="window.closeProductPage()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           Retour à la collection
         </button>
@@ -1202,7 +1204,7 @@ function addBotWithChips(text,chips,product){
     if(product){
       var card=document.createElement('div');
       card.className='product-link-card';
-      card.onclick=function(){openProduct(product);};
+      card.onclick=(function(prod){return function(){window.openProductPage(prod.id);};})(product);
       card.innerHTML='<div class="plc-img"><img src="'+product.img+'" alt="'+product.brand+'" loading="lazy"></div><div><div class="plc-brand">'+product.brand+'</div><div class="plc-name">'+product.name+'</div><div class="plc-price">'+product.price+'</div></div><div class="plc-arrow">→</div>';
       m.appendChild(card);
     }
@@ -1223,7 +1225,7 @@ function addBotWithChips(text,chips,product){
         btn.className='quick-btn';
         btn.textContent=c;
         if(c==='Voir la fiche produit'||c==='Voir la fiche'){
-          if(product) btn.onclick=(function(p,r){return function(){openProduct(p);r.remove();};})(product,row);
+          if(product) btn.onclick=(function(p,r){return function(){window.openProductPage(p.id);r.remove();};})(product,row);
         } else {
           btn.onclick=(function(chip,r){return function(){r.remove();handleChip(chip);};})(c,row);
         }
@@ -1382,7 +1384,7 @@ document.querySelectorAll('.filter-btn').forEach(function(b){
 var _currentPP = null;
 var _ppBoutiqueTel = BOUTIQUES.villiers.tel;
 
-function openProductPage(id){
+window.openProductPage = function openProductPage(id){
   var p = PRODUCTS.find(function(x){return x.id===id;});
   if(!p) return;
   _currentPP = p;
@@ -1393,7 +1395,7 @@ function openProductPage(id){
   document.getElementById('productPage').scrollTop=0;
 }
 
-function closeProductPage(){
+window.closeProductPage = function closeProductPage(){
   var pp=document.getElementById('productPage');
   if(!pp.classList.contains('open')) return;
   pp.classList.remove('open');
@@ -1434,7 +1436,7 @@ window.addEventListener('popstate', function(e){
   }
 })();
 
-function _buildPP(p){
+window._buildPP = function _buildPP(p){
   // Breadcrumb
   document.getElementById('ppBreadText').textContent = p.brand+' '+p.name;
   // Main image
@@ -1542,7 +1544,7 @@ function _buildPP(p){
     window.location.href='tel:'+_ppBoutiqueTel;
   });
   document.getElementById('ppBtnClara').addEventListener('click', function(){
-    closeProductPage();
+    window.closeProductPage();
     setTimeout(function(){
       openClara();
       if(_currentPP){
@@ -1569,7 +1571,7 @@ function _buildPP(p){
 }
 
 /* Legacy compat - openProduct still works from chat */
-window.openProduct = function(p){ openProductPage(p.id||p); };
+window.openProduct = function(p){ window.openProductPage(p.id||p); };
 window.closeModal = function(){};
 window.closeModalBtn = function(){};
 
